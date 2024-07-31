@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:poki/models/pokemon.dart';
 import 'package:poki/provider/pokemon_data_provider.dart';
+import 'package:poki/widgets/pokemon_stats_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 // ignore: must_be_immutable
@@ -34,31 +35,42 @@ class PokemonListTile extends ConsumerWidget {
   ) {
     return Skeletonizer(
       enabled: isLoading,
-      child: ListTile(
-        leading: pokemon != null
-            ? CircleAvatar(
-                backgroundImage: NetworkImage(
-                  pokemon.sprites!.frontDefault!,
-                ),
-              )
-            : const CircleAvatar(),
-        title: Text(pokemon != null
-            ? pokemon.name!.toUpperCase()
-            : "Loading .. for full line skeltonizer"),
-        subtitle: Text("Has ${pokemon?.moves?.length.toString() ?? 0} moves"),
-        trailing: IconButton(
-          onPressed: () {
-            if (_favouritePokemons.contains(pokemonUrl)) {
-              _favouritePokemonProvider.removeFavouritePokemon(pokemonUrl);
-            } else {
-              _favouritePokemonProvider.addFavouritePokemon(pokemonUrl);
-            }
-          },
-          icon: Icon(
-            _favouritePokemons.contains(pokemonUrl)
-                ? Icons.favorite
-                : Icons.favorite_border,
-            color: Colors.red,
+      child: GestureDetector(
+        onTap: () {
+          if (!isLoading) {
+            showDialog(
+                context: context,
+                builder: (_) {
+                  return PokemonStatCard(pokemonUrl: pokemonUrl);
+                });
+          }
+        },
+        child: ListTile(
+          leading: pokemon != null
+              ? CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    pokemon.sprites!.frontDefault!,
+                  ),
+                )
+              : const CircleAvatar(),
+          title: Text(pokemon != null
+              ? pokemon.name!.toUpperCase()
+              : "Loading .. for full line skeltonizer"),
+          subtitle: Text("Has ${pokemon?.moves?.length.toString() ?? 0} moves"),
+          trailing: IconButton(
+            onPressed: () {
+              if (_favouritePokemons.contains(pokemonUrl)) {
+                _favouritePokemonProvider.removeFavouritePokemon(pokemonUrl);
+              } else {
+                _favouritePokemonProvider.addFavouritePokemon(pokemonUrl);
+              }
+            },
+            icon: Icon(
+              _favouritePokemons.contains(pokemonUrl)
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: Colors.red,
+            ),
           ),
         ),
       ),

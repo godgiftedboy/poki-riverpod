@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:poki/helpers/helpers.dart';
 import 'package:poki/models/pokemon.dart';
 import 'package:poki/provider/pokemon_data_provider.dart';
+import 'package:poki/widgets/pokemon_stats_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 // ignore: must_be_immutable
@@ -30,77 +31,88 @@ class PokemonCard extends ConsumerWidget {
     return Skeletonizer(
       enabled: isLoading,
       ignoreContainers: true,
-      child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: getWidth(context) * 0.01,
-          vertical: getHeight(context) * 0.01,
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: getWidth(context) * 0.02,
-          vertical: getHeight(context) * 0.01,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Theme.of(context).primaryColor,
-          boxShadow: const [
-            BoxShadow(color: Colors.black26, spreadRadius: 2, blurRadius: 20)
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  pokemon?.name?.toUpperCase() ?? "Pokemon",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+      child: GestureDetector(
+        onTap: () {
+          if (!isLoading) {
+            showDialog(
+                context: context,
+                builder: (_) {
+                  return PokemonStatCard(pokemonUrl: pokemonUrl);
+                });
+          }
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: getWidth(context) * 0.01,
+            vertical: getHeight(context) * 0.01,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: getWidth(context) * 0.02,
+            vertical: getHeight(context) * 0.01,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Theme.of(context).primaryColor,
+            boxShadow: const [
+              BoxShadow(color: Colors.black26, spreadRadius: 2, blurRadius: 20)
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    pokemon?.name?.toUpperCase() ?? "Pokemon",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(
-                  "#${pokemon?.id?.toString()}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    "#${pokemon?.id?.toString()}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: CircleAvatar(
-                backgroundImage: pokemon != null
-                    ? NetworkImage(pokemon.sprites!.frontDefault!)
-                    : null,
-                radius: getHeight(context) * 0.05,
+                ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "${pokemon?.moves?.length} Moves",
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+              Expanded(
+                child: CircleAvatar(
+                  backgroundImage: pokemon != null
+                      ? NetworkImage(pokemon.sprites!.frontDefault!)
+                      : null,
+                  radius: getHeight(context) * 0.05,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    _favouritePokemonProvider
-                        .removeFavouritePokemon(pokemonUrl);
-                  },
-                  child: const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "${pokemon?.moves?.length} Moves",
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
-                )
-              ],
-            )
-          ],
+                  GestureDetector(
+                    onTap: () {
+                      _favouritePokemonProvider
+                          .removeFavouritePokemon(pokemonUrl);
+                    },
+                    child: const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
