@@ -7,6 +7,7 @@ import 'package:poki/services/http_service.dart';
 
 final pokemonDataProvider =
     FutureProvider.family<Pokemon?, String>((ref, url) async {
+  // ignore: no_leading_underscores_for_local_identifiers
   HTTPService _httpService = GetIt.instance.get<HTTPService>();
   Response? res = await _httpService.get(url);
   if (res != null && res.data != null) {
@@ -27,6 +28,7 @@ class FavouritePokemonProvider extends StateNotifier<List<String>> {
   final DatabaseService _databaseService =
       GetIt.instance.get<DatabaseService>();
 
+  // ignore: non_constant_identifier_names
   String FAVOURITE_POKEMON_LIST_KEY = "FAVOURITE_POKEMON_LIST_KEY";
   FavouritePokemonProvider(
     super._state,

@@ -11,7 +11,7 @@ class PokemonListTile extends ConsumerWidget {
   late FavouritePokemonProvider _favouritePokemonProvider;
   late List<String> _favouritePokemons;
 
-  PokemonListTile({required this.pokemonUrl});
+  PokemonListTile({super.key, required this.pokemonUrl});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +41,7 @@ class PokemonListTile extends ConsumerWidget {
                   pokemon.sprites!.frontDefault!,
                 ),
               )
-            : CircleAvatar(),
+            : const CircleAvatar(),
         title: Text(pokemon != null
             ? pokemon.name!.toUpperCase()
             : "Loading .. for full line skeltonizer"),
