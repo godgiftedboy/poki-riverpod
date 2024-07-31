@@ -4,6 +4,7 @@ import 'package:poki/models/pokemon.dart';
 import 'package:poki/provider/pokemon_data_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+// ignore: must_be_immutable
 class PokemonListTile extends ConsumerWidget {
   final String pokemonUrl;
 

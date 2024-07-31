@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:poki/pages/home_page.dart';
+import 'package:poki/services/database_service.dart';
 import 'package:poki/services/http_service.dart';
 
 void main() async {
@@ -12,6 +13,9 @@ void main() async {
 Future<void> _setupServices() async {
   GetIt.instance.registerSingleton<HTTPService>(
     HTTPService(),
+  );
+  GetIt.instance.registerSingleton<DatabaseService>(
+    DatabaseService(),
   );
 }
 
